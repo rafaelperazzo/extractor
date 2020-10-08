@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+   extractor:
+     image: python3:extractor
+     build: .
+     volumes: 
+       - ./arquivos:/usr/src/app
+       - ../share:/share
+     restart: always
+     networks:
+      - default
+networks:
+  default:
+    external:
+      name: vpn
