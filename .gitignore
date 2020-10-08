@@ -2,3 +2,5 @@
 *.zip
 *.pyc
 *.log
+*.txt
+*.csv
