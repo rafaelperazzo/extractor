@@ -24,16 +24,11 @@ import zeep
 import zipfile
 import os
 import logging
-import configparser
-import progressbar
+import sys
 
 wsdl = 'https://sci02-ter-jne.ufca.edu.br/cnpq'
 client = zeep.Client(wsdl=wsdl)
 WORKING_DIR = '/usr/src/app/'
-config = configparser.ConfigParser()
-config.read(WORKING_DIR + 'config.ini')
-XML_DIR = str(config['DEFAULT']['xml_dir'])
-IDLATTES_FILE = str(config['DEFAULT']['idlattes_file'])
 
 logging.basicConfig(filename=WORKING_DIR + 'extractor.log', filemode='w', format='%(asctime)s %(name)s - %(levelname)s - %(message)s',level=logging.ERROR)
 
@@ -43,19 +38,9 @@ def salvarCV(id):
     arquivo.write(resultado)
     arquivo.close()
     with zipfile.ZipFile(id + '.zip','r') as zip_ref:
-        zip_ref.extractall(XML_DIR)
+        zip_ref.extractall(WORKING_DIR)
     if os.path.exists(id + '.zip'):
         os.remove(id + '.zip')
 
-ids = open(IDLATTES_FILE,"r").read().splitlines()
-i = 0
-with progressbar.ProgressBar(max_value=len(ids)) as bar:
-    for id in ids:
-        resultado = client.service.getCurriculoCompactado(id)
-        try:
-            salvarCV(id)
-        except Exception as e:
-            logging.error(str(e))
-        finally:
-            i = i + 1
-            bar.update(i)
+#salvarCV('3078288668202994')
+print(str(sys.argv[1]))

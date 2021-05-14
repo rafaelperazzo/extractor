@@ -1,0 +1,1 @@
+docker run --rm -it -v "$PWD/arquivos":/usr/src/app python:3 python lattes_download.py
